@@ -1,0 +1,25 @@
+@page "/eventdetails/{Id:int}"
+@using EventEaseApp.Data
+@inject EventService EventService
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Event? selectedEvent;
+
+    protected override void OnInitialized()
+    {
+        selectedEvent = EventService.GetEvents().FirstOrDefault(e => e.Id == Id);
+    }
+}
+
+@if (selectedEvent != null)
+{
+    <h3>@selectedEvent.Name</h3>
+    <p>Fecha: @selectedEvent.Date.ToShortDateString()</p>
+    <p>Ubicación: @selectedEvent.Location</p>
+    <a href="/register">Registrarse</a>
+}
+else
+{
+    <p>Evento no encontrado.</p>
+}
