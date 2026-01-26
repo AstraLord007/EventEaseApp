@@ -1,11 +1,91 @@
 @page "/events"
-@inject EventEaseApp.Data.EventService EventService
+@using EventEaseApp.Data
+@using Microsoft.AspNetCore.Components.Forms
+@inject EventService EventService
 
-<h2>Eventos disponibles</h2>
+<h3>Eventos</h3>
 
-<div class="event-list">
-    @foreach (var ev in EventService.GetEvents())
+<!-- Formulario de registro -->
+<EditForm Model="@newEvent" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Nombre del evento:</label>
+        <InputText @bind-Value="newEvent.Name" class="form-control" />
+        <ValidationMessage For="@(() => newEvent.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label>Fecha:</label>
+        <InputDate @bind-Value="newEvent.Date" class="form-control" />
+        <ValidationMessage For="@(() => newEvent.Date)" />
+    </div>
+
+    <div class="form-group">
+        <label>Ubicación:</label>
+        <InputText @bind-Value="newEvent.Location" class="form-control" />
+        <ValidationMessage For="@(() => newEvent.Location)" />
+    </div>
+
+    <div class="form-group">
+        <label>Descripción:</label>
+        <InputTextArea @bind-Value="newEvent.Description" class="form-control" />
+        <ValidationMessage For="@(() => newEvent.Description)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+</EditForm>
+
+@if (successMessageVisible)
+{
+    <div class="alert alert-success mt-3">
+        🎉 Evento registrado correctamente
+    </div>
+}
+
+<hr />
+
+<!-- Lista de eventos -->
+<h4>Lista de eventos</h4>
+@if (events.Any())
+{
+    <ul class="list-group">
+        @foreach (var ev in events)
+        {
+            <li class="list-group-item">
+                <strong>@ev.Name</strong> - @ev.Date.ToShortDateString()
+                <br />
+                <em>@ev.Location</em>
+                <p>@ev.Description</p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No hay eventos registrados aún.</p>
+}
+
+@code {
+    private Event newEvent = new Event { Date = DateTime.Now };
+    private List<Event> events = new();
+    private bool successMessageVisible = false;
+
+    protected override void OnInitialized()
     {
-        <EventCard Event="ev" />
+        events = EventService.GetEvents();
     }
-</div>
+
+    private void HandleValidSubmit()
+    {
+        EventService.AddEvent(newEvent);
+        successMessageVisible = true;
+
+        // Reiniciamos el formulario
+        newEvent = new Event { Date = DateTime.Now };
+
+        // Refrescamos la lista
+        events = EventService.GetEvents();
+    }
+}
