@@ -1,0 +1,31 @@
+@page "/eventform"
+@using EventEaseApp.Data
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="@newEvent" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value="newEvent.Name" />
+    <ValidationMessage For="@(() => newEvent.Name)" />
+
+    <InputDate @bind-Value="newEvent.Date" />
+    <ValidationMessage For="@(() => newEvent.Date)" />
+
+    <InputText @bind-Value="newEvent.Location" />
+    <ValidationMessage For="@(() => newEvent.Location)" />
+
+    <InputTextArea @bind-Value="newEvent.Description" />
+    <ValidationMessage For="@(() => newEvent.Description)" />
+
+    <button type="submit">Guardar</button>
+</EditForm>
+
+@code {
+    private Event newEvent = new Event();
+
+    private void HandleValidSubmit()
+    {
+        // Procesar evento válido
+    }
+}
