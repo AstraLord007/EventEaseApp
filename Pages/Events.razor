@@ -1,15 +1,12 @@
 @page "/events"
+@using EventEaseApp.Components
 @inject EventEaseApp.Data.EventService EventService
 
-<h3>Eventos disponibles</h3>
+<h2>Eventos disponibles</h2>
 
-<ul>
+<div class="event-list">
     @foreach (var ev in EventService.GetEvents())
     {
-        <li>
-            <a href="/eventdetails/@ev.Name">@ev.Name</a> -
-            @ev.Date.ToShortDateString() -
-            @ev.Location
-        </li>
+        <EventCard Event="ev" />
     }
-</ul>
+</div>
