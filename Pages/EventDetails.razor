@@ -1,25 +1,47 @@
-@page "/eventdetails/{Id:int}"
+@page "/eventdetails/{Name}"
+@inject EventEaseApp.Data.EventService EventService
 @using EventEaseApp.Data
-@inject EventService EventService
+
+<h3>Detalles del evento</h3>
+
+<p><strong>Nombre:</strong> @selectedEvent.Name</p>
+<p><strong>Fecha:</strong> @selectedEvent.Date.ToShortDateString()</p>
+<p><strong>Ubicación:</strong> @selectedEvent.Location</p>
+
+<h4>Editar descripción</h4>
+<InputTextArea @bind-Value="selectedEvent.Description" />
+
+<p><strong>Descripción actual:</strong> @selectedEvent.Description</p>
 
 @code {
-    [Parameter] public int Id { get; set; }
-    private Event? selectedEvent;
+    [Parameter] public string Name { get; set; } = string.Empty;
+
+    // Declaramos el evento como no-nullable y lo inicializamos
+    private Event selectedEvent = new Event();
 
     protected override void OnInitialized()
     {
-        selectedEvent = EventService.GetEvents().FirstOrDefault(e => e.Id == Id);
-    }
-}
+        var ev = EventService.GetEvents().FirstOrDefault(e => e.Name == Name);
 
-@if (selectedEvent != null)
-{
-    <h3>@selectedEvent.Name</h3>
-    <p>Fecha: @selectedEvent.Date.ToShortDateString()</p>
-    <p>Ubicación: @selectedEvent.Location</p>
-    <a href="/register">Registrarse</a>
-}
-else
-{
-    <p>Evento no encontrado.</p>
+        if (ev is not null)
+        {
+            selectedEvent = ev;
+
+            if (string.IsNullOrEmpty(selectedEvent.Description))
+            {
+                selectedEvent.Description = "Descripción inicial del evento...";
+            }
+        }
+        else
+        {
+            // Si no se encuentra el evento, inicializamos con valores por defecto
+            selectedEvent = new Event
+            {
+                Name = "Evento no encontrado",
+                Date = DateTime.Now,
+                Location = "N/A",
+                Description = "Sin descripción disponible"
+            };
+        }
+    }
 }
