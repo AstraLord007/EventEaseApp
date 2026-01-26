@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventEaseApp.Data
@@ -18,5 +19,8 @@ namespace EventEaseApp.Data
 
         [StringLength(500, ErrorMessage = "La descripción no puede superar los 500 caracteres")]
         public string Description { get; set; } = string.Empty;
+
+        // 🔹 Nueva propiedad: lista de asistentes
+        public List<User> Attendees { get; set; } = new();
     }
 }

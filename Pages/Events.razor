@@ -2,10 +2,11 @@
 @using EventEaseApp.Data
 @using Microsoft.AspNetCore.Components.Forms
 @inject EventService EventService
+@inject SessionService SessionService
 
 <h3>Eventos</h3>
 
-<!-- Formulario de registro -->
+<!-- Formulario de registro de eventos -->
 <EditForm Model="@newEvent" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -46,7 +47,6 @@
 
 <hr />
 
-<!-- Lista de eventos -->
 <h4>Lista de eventos</h4>
 @if (events.Any())
 {
@@ -58,6 +58,24 @@
                 <br />
                 <em>@ev.Location</em>
                 <p>@ev.Description</p>
+
+                <!-- Mostrar asistentes -->
+                @if (ev.Attendees.Any())
+                {
+                    <p><strong>Asistentes:</strong> @string.Join(", ", ev.Attendees.Select(a => a.Name))</p>
+                }
+                else
+                {
+                    <p><em>No hay asistentes registrados aún.</em></p>
+                }
+
+                <!-- Botón para registrarse como asistente -->
+                @if (SessionService.IsLoggedIn)
+                {
+                    <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
+                        Confirmar asistencia
+                    </button>
+                }
             </li>
         }
     </ul>
@@ -81,11 +99,16 @@ else
     {
         EventService.AddEvent(newEvent);
         successMessageVisible = true;
-
-        // Reiniciamos el formulario
         newEvent = new Event { Date = DateTime.Now };
-
-        // Refrescamos la lista
         events = EventService.GetEvents();
+    }
+
+    private void RegistrarAsistencia(Event ev)
+    {
+        var user = SessionService.GetCurrentUser();
+        if (user != null)
+        {
+            EventService.RegisterAttendance(ev, user);
+        }
     }
 }

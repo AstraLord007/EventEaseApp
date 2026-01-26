@@ -1,0 +1,76 @@
+@page "/register"
+@using EventEaseApp.Data
+@using Microsoft.AspNetCore.Components.Forms
+@inject SessionService SessionService
+
+<h3>Registro de Usuario</h3>
+
+<EditForm Model="@newUser" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Nombre:</label>
+        <InputText @bind-Value="newUser.Name" class="form-control" />
+        <ValidationMessage For="@(() => newUser.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label>Correo electrónico:</label>
+        <InputText @bind-Value="newUser.Email" class="form-control" />
+        <ValidationMessage For="@(() => newUser.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+</EditForm>
+
+@if (successMessageVisible)
+{
+    <div class="alert alert-success mt-3">
+        ✅ Usuario registrado correctamente: @SessionService.GetCurrentUser()?.Name
+    </div>
+}
+
+@if (logoutMessageVisible)
+{
+    <div class="alert alert-info mt-3">
+        🔒 Sesión cerrada correctamente
+    </div>
+}
+
+<hr />
+
+@if (SessionService.IsLoggedIn)
+{
+    <p>👤 Usuario actual: @SessionService.GetCurrentUser()?.Name (@SessionService.GetCurrentUser()?.Email)</p>
+    <button class="btn btn-danger" @onclick="CerrarSesion">Cerrar sesión</button>
+}
+else
+{
+    <p>No hay usuario en sesión.</p>
+}
+
+@code {
+    private User newUser = new();
+    private bool successMessageVisible = false;
+    private bool logoutMessageVisible = false;
+
+    private void HandleValidSubmit()
+    {
+        // Guardamos el usuario en sesión
+        SessionService.Login(newUser);
+
+        successMessageVisible = true;
+        logoutMessageVisible = false;
+
+        // Reiniciamos el formulario
+        newUser = new User();
+    }
+
+    private void CerrarSesion()
+    {
+        SessionService.Logout();
+        successMessageVisible = false;
+        logoutMessageVisible = true;
+    }
+}

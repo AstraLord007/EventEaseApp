@@ -14,5 +14,14 @@ namespace EventEaseApp.Data
         {
             events.Add(newEvent);
         }
+
+        // 🔹 Nuevo método: registrar asistencia
+        public void RegisterAttendance(Event ev, User user)
+        {
+            if (!ev.Attendees.Any(a => a.Email == user.Email))
+            {
+                ev.Attendees.Add(user);
+            }
+        }
     }
 }
