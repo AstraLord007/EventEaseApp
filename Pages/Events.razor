@@ -69,12 +69,27 @@
                     <p><em>No hay asistentes registrados aún.</em></p>
                 }
 
-                <!-- Botón para registrarse como asistente -->
+                <!-- Botones de asistencia -->
                 @if (SessionService.IsLoggedIn)
                 {
-                    <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
-                        Confirmar asistencia
-                    </button>
+                    var user = SessionService.GetCurrentUser();
+                    if (user != null)
+                    {
+                        if (ev.Attendees.Any(a => a.Email == user.Email))
+                        {
+                            <!-- Si ya está registrado, mostrar botón de cancelar -->
+                            <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
+                                Cancelar asistencia
+                            </button>
+                        }
+                        else
+                        {
+                            <!-- Si no está registrado, mostrar botón de confirmar -->
+                            <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
+                                Confirmar asistencia
+                            </button>
+                        }
+                    }
                 }
             </li>
         }
@@ -109,6 +124,15 @@ else
         if (user != null)
         {
             EventService.RegisterAttendance(ev, user);
+        }
+    }
+
+    private void CancelarAsistencia(Event ev)
+    {
+        var user = SessionService.GetCurrentUser();
+        if (user != null)
+        {
+            EventService.CancelAttendance(ev, user);
         }
     }
 }
