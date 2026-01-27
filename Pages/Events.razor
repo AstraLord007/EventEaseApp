@@ -84,21 +84,24 @@ else
                     </NavLink>
 
                     <!-- Botones de asistencia -->
-                    var user = SessionService.GetCurrentUser();
-                    if (user != null)
+                    @if (SessionService.IsLoggedIn)
                     {
-                    if (ev.Attendees.Any(a => a.Email == user.Email))
-                    {
-                    <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
-                        Cancelar asistencia
-                    </button>
-                    }
-                    else
-                    {
-                    <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
-                        Confirmar asistencia
-                    </button>
-                    }
+                        var user = SessionService.GetCurrentUser();
+                        if (user != null)
+                        {
+                            if (ev.Attendees.Any(a => a.Email == user.Email))
+                            {
+                                <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
+                                    Cancelar asistencia
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
+                                    Confirmar asistencia
+                                </button>
+                            }
+                        }
                     }
                 </li>
             }
