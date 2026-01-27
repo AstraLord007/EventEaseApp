@@ -1,7 +1,9 @@
+@page "/"
 @page "/register"
 @using EventEaseApp.Data
 @using Microsoft.AspNetCore.Components.Forms
 @inject SessionService SessionService
+@inject NavigationManager NavigationManager
 
 <h3>Registro de Usuario</h3>
 
@@ -65,6 +67,9 @@ else
 
         // Reiniciamos el formulario
         newUser = new User();
+
+        // 🔹 Redirigir automáticamente a la página de eventos
+        NavigationManager.NavigateTo("/events");
     }
 
     private void CerrarSesion()
@@ -72,5 +77,8 @@ else
         SessionService.Logout();
         successMessageVisible = false;
         logoutMessageVisible = true;
+
+        // 🔹 Redirigir nuevamente al registro
+        NavigationManager.NavigateTo("/register");
     }
 }
