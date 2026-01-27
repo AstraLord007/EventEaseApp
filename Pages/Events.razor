@@ -3,104 +3,111 @@
 @using Microsoft.AspNetCore.Components.Forms
 @inject EventService EventService
 @inject SessionService SessionService
+@inject NavigationManager NavigationManager
 
 <h3>Eventos</h3>
 
-<!-- Formulario de registro de eventos -->
-<EditForm Model="@newEvent" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="form-group">
-        <label>Nombre del evento:</label>
-        <InputText @bind-Value="newEvent.Name" class="form-control" />
-        <ValidationMessage For="@(() => newEvent.Name)" />
-    </div>
-
-    <div class="form-group">
-        <label>Fecha:</label>
-        <InputDate @bind-Value="newEvent.Date" class="form-control" />
-        <ValidationMessage For="@(() => newEvent.Date)" />
-    </div>
-
-    <div class="form-group">
-        <label>Ubicación:</label>
-        <InputText @bind-Value="newEvent.Location" class="form-control" />
-        <ValidationMessage For="@(() => newEvent.Location)" />
-    </div>
-
-    <div class="form-group">
-        <label>Descripción:</label>
-        <InputTextArea @bind-Value="newEvent.Description" class="form-control" />
-        <ValidationMessage For="@(() => newEvent.Description)" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Registrar</button>
-</EditForm>
-
-@if (successMessageVisible)
+@if (!SessionService.IsLoggedIn)
 {
-    <div class="alert alert-success mt-3">
-        🎉 Evento registrado correctamente
+    <div class="alert alert-warning">
+        ⚠️ Acceso restringido: debes registrarte o iniciar sesión para poder crear y gestionar eventos.
     </div>
-}
-
-<hr />
-
-<h4>Lista de eventos</h4>
-@if (events.Any())
-{
-    <ul class="list-group">
-        @foreach (var ev in events)
-        {
-            <li class="list-group-item">
-                <strong>@ev.Name</strong> - @ev.Date.ToShortDateString()
-                <br />
-                <em>@ev.Location</em>
-                <p>@ev.Description</p>
-
-                <!-- Mostrar asistentes -->
-                @if (ev.Attendees.Any())
-                {
-                    <p><strong>Asistentes:</strong> @string.Join(", ", ev.Attendees.Select(a => a.Name))</p>
-                }
-                else
-                {
-                    <p><em>No hay asistentes registrados aún.</em></p>
-                }
-
-                <!-- Botón para ver detalles -->
-                <NavLink class="btn btn-info btn-sm me-2" href="@($"/eventdetails/{ev.Name}")">
-                    Ver detalles
-                </NavLink>
-
-                <!-- Botones de asistencia -->
-                @if (SessionService.IsLoggedIn)
-                {
-                    var user = SessionService.GetCurrentUser();
-                    if (user != null)
-                    {
-                        if (ev.Attendees.Any(a => a.Email == user.Email))
-                        {
-                            <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
-                                Cancelar asistencia
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
-                                Confirmar asistencia
-                            </button>
-                        }
-                    }
-                }
-            </li>
-        }
-    </ul>
 }
 else
 {
-    <p>No hay eventos registrados aún.</p>
+    <!-- Formulario de registro de eventos -->
+    <EditForm Model="@newEvent" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>Nombre del evento:</label>
+            <InputText @bind-Value="newEvent.Name" class="form-control" />
+            <ValidationMessage For="@(() => newEvent.Name)" />
+        </div>
+
+        <div class="form-group">
+            <label>Fecha:</label>
+            <InputDate @bind-Value="newEvent.Date" class="form-control" />
+            <ValidationMessage For="@(() => newEvent.Date)" />
+        </div>
+
+        <div class="form-group">
+            <label>Ubicación:</label>
+            <InputText @bind-Value="newEvent.Location" class="form-control" />
+            <ValidationMessage For="@(() => newEvent.Location)" />
+        </div>
+
+        <div class="form-group">
+            <label>Descripción:</label>
+            <InputTextArea @bind-Value="newEvent.Description" class="form-control" />
+            <ValidationMessage For="@(() => newEvent.Description)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </EditForm>
+
+    @if (successMessageVisible)
+    {
+        <div class="alert alert-success mt-3">
+            🎉 Evento registrado correctamente
+        </div>
+    }
+
+    <hr />
+
+    <h4>Lista de eventos</h4>
+    @if (events.Any())
+    {
+        <ul class="list-group">
+            @foreach (var ev in events)
+            {
+                <li class="list-group-item">
+                    <strong>@ev.Name</strong> - @ev.Date.ToShortDateString()
+                    <br />
+                    <em>@ev.Location</em>
+                    <p>@ev.Description</p>
+
+                    <!-- Mostrar asistentes -->
+                    @if (ev.Attendees.Any())
+                    {
+                        <p><strong>Asistentes:</strong> @string.Join(", ", ev.Attendees.Select(a => a.Name))</p>
+                    }
+                    else
+                    {
+                        <p><em>No hay asistentes registrados aún.</em></p>
+                    }
+
+                    <!-- Botón para ver detalles -->
+                    <NavLink class="btn btn-info btn-sm me-2" href="@($"/eventdetails/{ev.Name}")">
+                        Ver detalles
+                    </NavLink>
+
+                    <!-- Botones de asistencia -->
+                    var user = SessionService.GetCurrentUser();
+                    if (user != null)
+                    {
+                    if (ev.Attendees.Any(a => a.Email == user.Email))
+                    {
+                    <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
+                        Cancelar asistencia
+                    </button>
+                    }
+                    else
+                    {
+                    <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
+                        Confirmar asistencia
+                    </button>
+                    }
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No hay eventos registrados aún.</p>
+    }
 }
 
 @code {
@@ -110,6 +117,13 @@ else
 
     protected override void OnInitialized()
     {
+        if (!SessionService.IsLoggedIn)
+        {
+            // Redirigir automáticamente a la página de registro
+            NavigationManager.NavigateTo("/register");
+            return;
+        }
+
         events = EventService.GetEvents();
     }
 
