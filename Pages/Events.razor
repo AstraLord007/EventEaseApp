@@ -69,6 +69,11 @@
                     <p><em>No hay asistentes registrados aún.</em></p>
                 }
 
+                <!-- Botón para ver detalles -->
+                <NavLink class="btn btn-info btn-sm me-2" href="@($"/eventdetails/{ev.Name}")">
+                    Ver detalles
+                </NavLink>
+
                 <!-- Botones de asistencia -->
                 @if (SessionService.IsLoggedIn)
                 {
@@ -77,14 +82,12 @@
                     {
                         if (ev.Attendees.Any(a => a.Email == user.Email))
                         {
-                            <!-- Si ya está registrado, mostrar botón de cancelar -->
                             <button class="btn btn-warning btn-sm" @onclick="() => CancelarAsistencia(ev)">
                                 Cancelar asistencia
                             </button>
                         }
                         else
                         {
-                            <!-- Si no está registrado, mostrar botón de confirmar -->
                             <button class="btn btn-success btn-sm" @onclick="() => RegistrarAsistencia(ev)">
                                 Confirmar asistencia
                             </button>
