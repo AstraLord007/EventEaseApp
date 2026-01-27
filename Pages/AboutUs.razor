@@ -1,0 +1,20 @@
+@page "/about"
+@layout MainLayout
+@inject SessionService SessionService
+
+<h3>About Us</h3>
+
+<p>
+    <strong>EventEaseApp</strong> es una aplicación diseñada para simplificar la gestión de eventos.
+    Permite a los usuarios registrarse, crear eventos, confirmar o cancelar asistencia y editar detalles.
+</p>
+
+<p>
+    El objetivo es ofrecer una experiencia clara y eficiente para organizar y participar en eventos,
+    manteniendo siempre la sesión activa hasta que el usuario decida cerrar sesión.
+</p>
+
+@if (SessionService.IsLoggedIn)
+{
+    <p><em>Sesión activa como:</em> @SessionService.GetCurrentUser()?.Name</p>
+}
