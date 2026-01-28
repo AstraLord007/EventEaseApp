@@ -57,10 +57,10 @@ else
     private bool successMessageVisible = false;
     private bool logoutMessageVisible = false;
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
         // Guardamos el usuario en sesión
-        SessionService.Login(newUser);
+        await SessionService.Login(newUser);
 
         successMessageVisible = true;
         logoutMessageVisible = false;
@@ -72,9 +72,9 @@ else
         NavigationManager.NavigateTo("/events");
     }
 
-    private void CerrarSesion()
+    private async Task CerrarSesion()
     {
-        SessionService.Logout();
+        await SessionService.Logout();
         successMessageVisible = false;
         logoutMessageVisible = true;
 

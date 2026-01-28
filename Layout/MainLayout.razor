@@ -28,9 +28,9 @@
 </div>
 
 @code {
-    private void CerrarSesion()
+    private async Task CerrarSesion()
     {
-        SessionService.Logout();
+        await SessionService.Logout();
         // 🔹 Redirigir al registro
         NavigationManager.NavigateTo("/register");
     }

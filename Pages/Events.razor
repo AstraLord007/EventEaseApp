@@ -130,29 +130,29 @@ else
         events = EventService.GetEvents();
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        EventService.AddEvent(newEvent);
+        await EventService.AddEvent(newEvent);
         successMessageVisible = true;
         newEvent = new Event { Date = DateTime.Now };
         events = EventService.GetEvents();
     }
 
-    private void RegistrarAsistencia(Event ev)
+    private async Task RegistrarAsistencia(Event ev)
     {
         var user = SessionService.GetCurrentUser();
         if (user != null)
         {
-            EventService.RegisterAttendance(ev, user);
+            await EventService.RegisterAttendance(ev, user);
         }
     }
 
-    private void CancelarAsistencia(Event ev)
+    private async Task CancelarAsistencia(Event ev)
     {
         var user = SessionService.GetCurrentUser();
         if (user != null)
         {
-            EventService.CancelAttendance(ev, user);
+            await EventService.CancelAttendance(ev, user);
         }
     }
 }
