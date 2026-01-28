@@ -21,7 +21,6 @@ namespace EventEaseApp.Data
             _jsRuntime = jsRuntime;
         }
 
-        // 🔹 Inicializar desde localStorage
         public async Task InitializeAsync()
         {
             var eventsJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "events");
@@ -35,17 +34,14 @@ namespace EventEaseApp.Data
             }
         }
 
-        // 🔹 Obtener lista de eventos
         public List<Event> GetEvents() => events;
 
-        // 🔹 Agregar un nuevo evento
         public async Task AddEvent(Event newEvent)
         {
             events.Add(newEvent);
             await SaveEvents();
         }
 
-        // 🔹 Registrar asistencia de un usuario a un evento
         public async Task RegisterAttendance(Event ev, User user)
         {
             if (!ev.Attendees.Any(a => a.Email == user.Email))
@@ -55,7 +51,6 @@ namespace EventEaseApp.Data
             }
         }
 
-        // 🔹 Cancelar asistencia de un usuario a un evento
         public async Task CancelAttendance(Event ev, User user)
         {
             var attendee = ev.Attendees.FirstOrDefault(a => a.Email == user.Email);
@@ -66,7 +61,6 @@ namespace EventEaseApp.Data
             }
         }
 
-        // 🔹 Guardar eventos en localStorage
         private async Task SaveEvents()
         {
             var eventsJson = JsonSerializer.Serialize(events);

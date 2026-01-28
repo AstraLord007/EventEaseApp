@@ -1,12 +1,67 @@
 @using EventEaseApp.Data
+@inject SessionService SessionService
+@inject EventService EventService
 
-<div class="event-card">
-    <h3>@Event.Name</h3>
-    <p><strong>Fecha:</strong> @Event.Date.ToShortDateString()</p>
-    <p><strong>Ubicación:</strong> @Event.Location</p>
-    <a href="/eventdetails/@Event.Name">Ver detalles</a>
+<div class="event-card card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Event.Name</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Event.Date.ToShortDateString() - @Event.Location</h6>
+        <p class="card-text">@Event.Description</p>
+
+        @if (Event.Attendees.Any())
+        {
+            <p><strong>Asistentes:</strong> @string.Join(", ", Event.Attendees.Select(a => a.Name))</p>
+        }
+        else
+        {
+            <p><em>No hay asistentes registrados aún.</em></p>
+        }
+
+        <a class="btn btn-info btn-sm me-2" href="/eventdetails/@Event.Name">Ver detalles</a>
+
+        @if (SessionService.IsLoggedIn)
+        {
+            var user = SessionService.GetCurrentUser();
+            if (user != null)
+            {
+                if (Event.Attendees.Any(a => a.Email == user.Email))
+                {
+                    <button class="btn btn-warning btn-sm" @onclick="CancelarAsistencia">
+                        Cancelar asistencia
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-success btn-sm" @onclick="RegistrarAsistencia">
+                        Confirmar asistencia
+                    </button>
+                }
+            }
+        }
+    </div>
 </div>
 
 @code {
     [Parameter] public Event Event { get; set; } = new Event();
+    [Parameter] public EventCallback OnEventUpdated { get; set; }
+
+    private async Task RegistrarAsistencia()
+    {
+        var user = SessionService.GetCurrentUser();
+        if (user != null)
+        {
+            await EventService.RegisterAttendance(Event, user);
+            await OnEventUpdated.InvokeAsync();
+        }
+    }
+
+    private async Task CancelarAsistencia()
+    {
+        var user = SessionService.GetCurrentUser();
+        if (user != null)
+        {
+            await EventService.CancelAttendance(Event, user);
+            await OnEventUpdated.InvokeAsync();
+        }
+    }
 }
