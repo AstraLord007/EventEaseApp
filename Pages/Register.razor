@@ -59,16 +59,13 @@ else
 
     private async Task HandleValidSubmit()
     {
-        // Guardamos el usuario en sesión
         await SessionService.Login(newUser);
 
         successMessageVisible = true;
         logoutMessageVisible = false;
 
-        // Reiniciamos el formulario
         newUser = new User();
 
-        // 🔹 Redirigir automáticamente a la página de eventos
         NavigationManager.NavigateTo("/events");
     }
 
@@ -78,7 +75,6 @@ else
         successMessageVisible = false;
         logoutMessageVisible = true;
 
-        // 🔹 Redirigir nuevamente al registro
         NavigationManager.NavigateTo("/register");
     }
 }

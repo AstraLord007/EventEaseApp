@@ -3,35 +3,61 @@
 @inject SessionService SessionService
 @inject NavigationManager NavigationManager
 
-<div class="page">
+<div class="layout-wrapper">
+    <!-- Sidebar -->
     <div class="sidebar">
         <NavMenu />
     </div>
 
-    <main>
-        <div class="top-row px-4">
+    <div class="layout-main @(NavigationManager.Uri.Contains("/about") 
+                     || NavigationManager.Uri.Contains("/register") 
+                     || NavigationManager.Uri.EndsWith("/") 
+                     || NavigationManager.Uri.Contains("/eventdetails") ? "full-width" : "")">
 
-            <!-- 🔹 Mostrar usuario actual si está logueado -->
-            @if (SessionService.IsLoggedIn)
-            {
-                <span class="ms-3">👤 @SessionService.GetCurrentUser()?.Name</span>
-                <button class="btn btn-sm btn-outline-danger ms-2" @onclick="CerrarSesion">
-                    Cerrar sesión
-                </button>
-            }
+        <!-- Barra superior fija -->
+        <div class="top-bar">
+            <div class="top-left">
+                <img src="favicon.png" alt="Logo" class="app-logo" />
+                <span class="app-name">EventEaseApp</span>
+            </div>
+            <div class="top-right">
+                @if (SessionService.IsLoggedIn)
+                {
+                    <span class="user-info">👤 @SessionService.GetCurrentUser()?.Name</span>
+                    <button class="btn btn-sm btn-outline-danger ms-2" @onclick="CerrarSesion">
+                        Cerrar sesión
+                    </button>
+                }
+            </div>
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+        <!-- Layout principal: aside + main -->
+        <div class="events-layout">
+            @if (!(NavigationManager.Uri.Contains("/about")
+                        || NavigationManager.Uri.Contains("/register")
+                        || NavigationManager.Uri.EndsWith("/")
+                        || NavigationManager.Uri.Contains("/eventdetails")))
+            {
+                <!-- Formulario fijo -->
+                <aside class="event-form">
+                    <!-- Aquí se renderiza el formulario de eventos -->
+                </aside>
+            }
+
+            <!-- Contenido principal -->
+            <main class="events-list">
+                @Body
+            </main>
+        </div>
+
+        <Footer />
+    </div>
 </div>
 
 @code {
     private async Task CerrarSesion()
     {
         await SessionService.Logout();
-        // 🔹 Redirigir al registro
         NavigationManager.NavigateTo("/register");
     }
 }

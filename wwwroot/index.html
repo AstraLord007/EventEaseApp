@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
@@ -9,25 +9,65 @@
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="EventEaseApp.styles.css" rel="stylesheet" />
 </head>
 
 <body>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>EventEaseApp</h2>
+            <ul>
+                <li><a href="/events">Eventos</a></li>
+                <li><a href="/about">Sobre nosotros</a></li>
+            </ul>
+        </nav>
+
+        <!-- Barra superior -->
+        <header class="top-bar">
+            <div class="top-left">
+                <img src="favicon.png" alt="Logo" class="app-logo" />
+                <span class="app-name">EventEaseApp</span>
+            </div>
+            <div class="top-right">
+                <span class="user-info">👤 mauri</span>
+                <a href="/logout" class="btn btn-sm btn-outline-danger ms-2">Cerrar sesión</a>
+            </div>
+        </header>
+
+        <!-- Layout principal -->
+        <div class="events-layout">
+            <!-- Formulario fijo -->
+            <aside class="event-form">
+                <!-- ✅ Eliminado el título “Eventos” -->
+                <!-- Aquí Blazor renderiza el formulario de registro -->
+            </aside>
+
+            <!-- Lista de eventos ocupa todo el espacio restante -->
+            <main class="events-list">
+                <h4 class="events-title">Lista de eventos</h4>
+                <div class="event-grid">
+                    <!-- Aquí Blazor renderiza las tarjetas de eventos -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                © 2026 - EventEaseApp
+                <a href="/about">Sobre nosotros</a> |
+                <a href="/events">Eventos</a>
+            </div>
+        </footer>
     </div>
 
+    <!-- Error UI -->
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
+        Error inesperado.
+        <a href="." class="reload">Recargar</a>
         <span class="dismiss">🗙</span>
     </div>
 
-    <!-- 🔹 Script correcto -->
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 

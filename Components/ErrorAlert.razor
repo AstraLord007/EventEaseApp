@@ -1,0 +1,11 @@
+@if (ShowError)
+{
+    <div class="alert alert-danger text-center fixed-bottom mb-0">
+        ⚠️ Ocurrió un error al cargar los eventos.
+        <a href="/" class="alert-link">Recargar</a>
+    </div>
+}
+
+@code {
+    [Parameter] public bool ShowError { get; set; }
+}

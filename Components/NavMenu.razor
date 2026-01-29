@@ -1,13 +1,8 @@
 @using Microsoft.AspNetCore.Components.Routing
 
-<nav class="nav flex-column bg-light p-3" style="height:100vh; width:220px;">
-    <h5 class="mb-3">Menú</h5>
-
-    <NavLink href="/events" class="nav-link" Match="NavLinkMatch.All">
-        <span class="oi oi-calendar"></span> Eventos
-    </NavLink>
-
-    <NavLink href="/about" class="nav-link">
-        <span class="oi oi-info"></span> About Us
-    </NavLink>
+<nav>
+    <ul>
+        <li><a href="/events">Eventos</a></li>
+        <li><a href="/about">About Us</a></li>
+    </ul>
 </nav>
