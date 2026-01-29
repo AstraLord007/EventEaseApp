@@ -61,6 +61,31 @@ namespace EventEaseApp.Data
             }
         }
 
+        // 🔹 Nuevo método para eliminar evento
+        public async Task DeleteEvent(Guid id)
+        {
+            var ev = events.FirstOrDefault(e => e.Id == id);
+            if (ev != null)
+            {
+                events.Remove(ev);
+                await SaveEvents();
+            }
+        }
+
+        public async Task UpdateEvent(Event updatedEvent)
+        {
+            var existing = events.FirstOrDefault(e => e.Id == updatedEvent.Id);
+            if (existing != null)
+            {
+                existing.Name = updatedEvent.Name;
+                existing.Date = updatedEvent.Date;
+                existing.Location = updatedEvent.Location;
+                existing.Description = updatedEvent.Description;
+                existing.Attendees = updatedEvent.Attendees;
+                await SaveEvents();
+            }
+        }
+
         private async Task SaveEvents()
         {
             var eventsJson = JsonSerializer.Serialize(events);

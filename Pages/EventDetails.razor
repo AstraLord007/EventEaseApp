@@ -1,7 +1,8 @@
-@page "/eventdetails/{Name}"
+@page "/eventdetails/{Id:guid}"
 @inject EventService EventService
 @inject SessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 @using EventEaseApp.Data
 
 <div class="event-details-card">
@@ -14,28 +15,34 @@
         <div class="form-group">
             <label>Nombre:</label>
             <InputText @bind-Value="selectedEvent.Name" class="form-control" />
+            <ValidationMessage For="@(() => selectedEvent.Name)" />
         </div>
 
         <div class="form-group">
             <label>Fecha:</label>
             <InputDate @bind-Value="selectedEvent.Date" class="form-control" />
+            <ValidationMessage For="@(() => selectedEvent.Date)" />
         </div>
 
         <div class="form-group">
             <label>Ubicación:</label>
             <InputText @bind-Value="selectedEvent.Location" class="form-control" />
+            <ValidationMessage For="@(() => selectedEvent.Location)" />
         </div>
 
         <div class="form-group">
             <label>Descripción:</label>
             <InputTextArea @bind-Value="selectedEvent.Description" class="form-control" />
+            <ValidationMessage For="@(() => selectedEvent.Description)" />
         </div>
 
         <div class="event-details-actions">
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <button type="button" class="btn btn-outline-secondary"
-                @onclick="@(() => NavigationManager.NavigateTo("/events"))">
+            <button type="button" class="btn btn-outline-secondary" @onclick="VolverALista">
                 Volver a la lista
+            </button>
+            <button type="button" class="btn btn-danger" @onclick="EliminarEvento">
+                Eliminar evento
             </button>
         </div>
     </EditForm>
@@ -49,13 +56,13 @@
 </div>
 
 @code {
-    [Parameter] public string Name { get; set; } = string.Empty;
+    [Parameter] public Guid Id { get; set; } // 🔹 ahora usamos Id
     private Event selectedEvent = new Event();
     private bool mensajeGuardado = false;
 
     protected override void OnInitialized()
     {
-        var ev = EventService.GetEvents().FirstOrDefault(e => e.Name == Name);
+        var ev = EventService.GetEvents().FirstOrDefault(e => e.Id == Id);
 
         if (ev is not null)
         {
@@ -73,9 +80,41 @@
         }
     }
 
-    private void GuardarCambios()
+    private async Task GuardarCambios()
     {
+        if (string.IsNullOrWhiteSpace(selectedEvent.Name) ||
+        string.IsNullOrWhiteSpace(selectedEvent.Location) ||
+        string.IsNullOrWhiteSpace(selectedEvent.Description))
+        {
+            mensajeGuardado = false;
+            return;
+        }
+
+        await EventService.UpdateEvent(selectedEvent); // ✅ ahora por Id
         mensajeGuardado = true;
         NavigationManager.NavigateTo("/events");
+    }
+
+    private async Task VolverALista()
+    {
+        if (string.IsNullOrWhiteSpace(selectedEvent.Name) ||
+        string.IsNullOrWhiteSpace(selectedEvent.Location) ||
+        string.IsNullOrWhiteSpace(selectedEvent.Description))
+        {
+            await EventService.DeleteEvent(selectedEvent.Id); // ✅ ahora por Id
+        }
+
+        NavigationManager.NavigateTo("/events");
+    }
+
+    private async Task EliminarEvento()
+    {
+        bool confirmar = await JSRuntime.InvokeAsync<bool>(
+        "confirm", $"¿Seguro que deseas eliminar el evento '{selectedEvent.Name}'?");
+        if (confirmar)
+        {
+            await EventService.DeleteEvent(selectedEvent.Id); // ✅ ahora por Id
+            NavigationManager.NavigateTo("/events");
+        }
     }
 }

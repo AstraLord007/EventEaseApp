@@ -199,3 +199,159 @@ body {
         width: 100%;
     }
 }
+
+/* === Ajustes SOLO para la página de eventos === */
+.events-layout .events-list {
+    flex: 1;
+    margin-left: 15rem;
+    padding: 1.5rem;
+    overflow-y: visible;
+    /* elimina scroll vertical */
+    display: block;
+    /* dejamos que el grid maneje el layout */
+}
+
+/* Grid de tarjetas SOLO en eventos */
+.events-layout .event-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* fijo en 2 columnas */
+    gap: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive: en pantallas pequeñas se reduce a 1 columna */
+@media (max-width: 768px) {
+    .events-layout .event-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === Responsive para About Us y páginas sin aside === */
+@media (max-width: 768px) {
+
+    /* Sidebar pasa arriba en móviles */
+    .sidebar {
+        position: relative;
+        width: 100%;
+        top: 0;
+        bottom: auto;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Barra superior se ajusta */
+    .top-bar {
+        left: 0;
+        right: 0;
+    }
+
+    .app-footer {
+        position: fixed;
+        bottom: 0;
+        left: 200px;
+        right: 0;
+        background-color: #4A90E2;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        /* más compacto */
+        text-align: center;
+        font-size: 0.9rem;
+        z-index: 1000;
+    }
+
+    /* Contenido About Us más fluido */
+    .layout-main.full-width .events-list {
+        margin-left: 0 !important;
+        height: auto;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 1rem;
+        background: #fff;
+        /* fondo limpio en móviles */
+    }
+
+    .about-header {
+        margin-top: 1rem;
+    }
+
+    .about-logo {
+        max-width: 150px;
+        height: auto;
+    }
+
+    .about-title {
+        font-size: 1.5rem;
+    }
+
+    /* Texto más cómodo en móviles */
+    .layout-main.full-width .events-list p,
+    .layout-main.full-width .events-list div {
+        max-width: 100%;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+/* Footer más compacto */
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 200px;
+    right: 0;
+    background-color: #4A90E2;
+    color: #fff;
+    padding: 0.5rem;
+    /* antes era 1rem, ahora más chico */
+    text-align: center;
+    font-size: 0.9rem;
+    /* texto un poco más compacto */
+}
+
+/* Centrar botones de paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    /* centra horizontalmente */
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+    /* deja espacio antes del footer */
+}
+
+.pagination button,
+.pagination a {
+    margin: 0 0.25rem;
+}
+
+/* Centrado y separación para paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    /* espacio extra para que no quede pegado al footer */
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pagination button,
+.pagination a {
+    padding: 0.5rem 1rem;
+    background-color: #4A90E2;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pagination button:hover,
+.pagination a:hover {
+    background-color: #357ABD;
+}

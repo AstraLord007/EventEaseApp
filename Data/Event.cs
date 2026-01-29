@@ -6,6 +6,8 @@ namespace EventEaseApp.Data
 {
     public class Event
     {
+        public Guid Id { get; set; } = Guid.NewGuid(); // 🔹 Identificador único
+
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres")]
         public string Name { get; set; } = string.Empty;
@@ -20,7 +22,6 @@ namespace EventEaseApp.Data
         [StringLength(500, ErrorMessage = "La descripción no puede superar los 500 caracteres")]
         public string Description { get; set; } = string.Empty;
 
-        // 🔹 Nueva propiedad: lista de asistentes
         public List<User> Attendees { get; set; } = new();
     }
 }
