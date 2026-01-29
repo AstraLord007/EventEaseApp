@@ -17,20 +17,54 @@ body {
 
 /* === Sidebar izquierda === */
 .sidebar {
-    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 🔹 centra horizontalmente */
+    justify-content: flex-start;
+    padding: 2rem 1rem;
+    width: 240px;
     background-color: #f8f9fa;
-    padding: 1rem;
     border-right: 1px solid #ddd;
     position: fixed;
     top: 3.5rem;
     bottom: 0;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar .nav {
+    width: auto;
+}
+
+.sidebar .btn {
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+}
+
+/* Hover y focus */
+.sidebar button:hover,
+.sidebar button:focus {
+    background-color: #357ABD;
+    /* azul más oscuro */
+    transform: scale(1.05);
+    /* efecto de agrandarse */
+}
+
+/* Botón activo (ejemplo para resaltar la sección actual) */
+.sidebar button.active {
+    background-color: #0056b3;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
 }
 
 /* === Barra superior fija === */
 .top-bar {
     position: fixed;
     top: 0;
-    left: 200px;
+    left: 240px;
+    /* ajustado al nuevo ancho del sidebar */
     right: 0;
     height: 3.5rem;
     background-color: #ffffff;
@@ -52,7 +86,8 @@ body {
 .app-footer {
     position: fixed;
     bottom: 0;
-    left: 200px;
+    left: 240px;
+    /* ajustado al nuevo ancho del sidebar */
     right: 0;
     background-color: #4A90E2;
     color: #fff;
@@ -73,7 +108,8 @@ body {
     position: fixed;
     top: 3.5rem;
     bottom: 0;
-    left: 200px;
+    left: 240px;
+    /* ajustado al nuevo ancho del sidebar */
     background-color: #fff;
     padding: 1.5rem;
     border-right: 1px solid #ddd;
@@ -84,7 +120,8 @@ body {
 /* Main ocupa el resto cuando hay aside */
 .events-list {
     flex: 1;
-    margin-left: 15rem;
+    margin-left: 18rem;
+    /* ajustado al nuevo ancho del sidebar + form */
     padding: 1.5rem;
     overflow-y: auto;
     display: flex;
@@ -97,13 +134,10 @@ body {
     margin-left: 0 !important;
     display: flex;
     justify-content: center;
-    /* centra horizontalmente */
     align-items: center;
-    /* centra verticalmente */
     text-align: left;
     height: calc(100vh - 3.5rem - 3.5rem);
     background: #f9f9f9;
-    /* fondo suave */
     border-radius: 8px;
     padding: 2rem;
 }
@@ -128,7 +162,6 @@ body {
 
 .about-logo {
     width: 220px;
-    /* logo grande */
     height: auto;
     margin-bottom: 1rem;
 }
@@ -203,19 +236,17 @@ body {
 /* === Ajustes SOLO para la página de eventos === */
 .events-layout .events-list {
     flex: 1;
-    margin-left: 15rem;
+    margin-left: 18rem;
+    /* ajustado al nuevo ancho del sidebar + form */
     padding: 1.5rem;
     overflow-y: visible;
-    /* elimina scroll vertical */
     display: block;
-    /* dejamos que el grid maneje el layout */
 }
 
 /* Grid de tarjetas SOLO en eventos */
 .events-layout .event-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* fijo en 2 columnas */
     gap: 1.5rem;
     margin-top: 1rem;
     width: 100%;
@@ -231,8 +262,6 @@ body {
 
 /* === Responsive para About Us y páginas sin aside === */
 @media (max-width: 768px) {
-
-    /* Sidebar pasa arriba en móviles */
     .sidebar {
         position: relative;
         width: 100%;
@@ -244,7 +273,6 @@ body {
         justify-content: center;
     }
 
-    /* Barra superior se ajusta */
     .top-bar {
         left: 0;
         right: 0;
@@ -253,18 +281,16 @@ body {
     .app-footer {
         position: fixed;
         bottom: 0;
-        left: 200px;
+        left: 0;
         right: 0;
         background-color: #4A90E2;
         color: #fff;
         padding: 0.5rem 1rem;
-        /* más compacto */
         text-align: center;
         font-size: 0.9rem;
         z-index: 1000;
     }
 
-    /* Contenido About Us más fluido */
     .layout-main.full-width .events-list {
         margin-left: 0 !important;
         height: auto;
@@ -272,7 +298,6 @@ body {
         justify-content: flex-start;
         padding: 1rem;
         background: #fff;
-        /* fondo limpio en móviles */
     }
 
     .about-header {
@@ -288,7 +313,6 @@ body {
         font-size: 1.5rem;
     }
 
-    /* Texto más cómodo en móviles */
     .layout-main.full-width .events-list p,
     .layout-main.full-width .events-list div {
         max-width: 100%;

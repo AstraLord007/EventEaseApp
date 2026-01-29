@@ -16,6 +16,8 @@ namespace EventEaseApp.Data
             new Event { Name = "Feria del Libro", Date = DateTime.Now.AddDays(14), Location = "Buenos Aires", Description = "Presentaciones y charlas" }
         };
 
+        public int PageSize { get; set; } = 4; // 🔹 Tamaño fijo de página
+
         public EventService(IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
@@ -35,6 +37,26 @@ namespace EventEaseApp.Data
         }
 
         public List<Event> GetEvents() => events;
+
+        // 🔹 Obtener eventos por página
+        public List<Event> GetEventsByPage(int currentPage)
+        {
+            int totalEvents = events.Count;
+            int totalPages = (int)Math.Ceiling(totalEvents / (double)PageSize);
+
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            return events
+                .Skip((currentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+        }
+
+        public int GetTotalPages()
+        {
+            return (int)Math.Ceiling(events.Count / (double)PageSize);
+        }
 
         public async Task AddEvent(Event newEvent)
         {
@@ -61,7 +83,6 @@ namespace EventEaseApp.Data
             }
         }
 
-        // 🔹 Nuevo método para eliminar evento
         public async Task DeleteEvent(Guid id)
         {
             var ev = events.FirstOrDefault(e => e.Id == id);

@@ -1,8 +1,16 @@
 @using Microsoft.AspNetCore.Components.Routing
 
-<nav>
-    <ul>
-        <li><a href="/events">Eventos</a></li>
-        <li><a href="/about">About Us</a></li>
+<nav class="sidebar text-center">
+    <ul class="nav flex-column align-items-center">
+        <li class="nav-item mb-3">
+            <NavLink href="/events" class="btn btn-primary px-4" Match="NavLinkMatch.All">
+                📅 Eventos
+            </NavLink>
+        </li>
+        <li class="nav-item mb-3">
+            <NavLink href="/about" class="btn btn-secondary px-4">
+                ℹ️ About Us
+            </NavLink>
+        </li>
     </ul>
 </nav>

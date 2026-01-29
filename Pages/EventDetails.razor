@@ -38,14 +38,18 @@
 
         <div class="event-details-actions">
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <button type="button" class="btn btn-outline-secondary" @onclick="VolverALista">
-                Volver a la lista
-            </button>
             <button type="button" class="btn btn-danger" @onclick="EliminarEvento">
                 Eliminar evento
             </button>
         </div>
     </EditForm>
+
+    @if (mensajeError)
+    {
+        <div class="alert alert-danger mt-3">
+            ⚠️ Los campos Nombre, Ubicación y Descripción no pueden estar vacíos.
+        </div>
+    }
 
     @if (mensajeGuardado)
     {
@@ -56,9 +60,10 @@
 </div>
 
 @code {
-    [Parameter] public Guid Id { get; set; } // 🔹 ahora usamos Id
+    [Parameter] public Guid Id { get; set; }
     private Event selectedEvent = new Event();
     private bool mensajeGuardado = false;
+    private bool mensajeError = false;
 
     protected override void OnInitialized()
     {
@@ -82,28 +87,19 @@
 
     private async Task GuardarCambios()
     {
+        // Validación adicional por seguridad
         if (string.IsNullOrWhiteSpace(selectedEvent.Name) ||
         string.IsNullOrWhiteSpace(selectedEvent.Location) ||
         string.IsNullOrWhiteSpace(selectedEvent.Description))
         {
+            mensajeError = true;
             mensajeGuardado = false;
             return;
         }
 
-        await EventService.UpdateEvent(selectedEvent); // ✅ ahora por Id
+        await EventService.UpdateEvent(selectedEvent);
+        mensajeError = false;
         mensajeGuardado = true;
-        NavigationManager.NavigateTo("/events");
-    }
-
-    private async Task VolverALista()
-    {
-        if (string.IsNullOrWhiteSpace(selectedEvent.Name) ||
-        string.IsNullOrWhiteSpace(selectedEvent.Location) ||
-        string.IsNullOrWhiteSpace(selectedEvent.Description))
-        {
-            await EventService.DeleteEvent(selectedEvent.Id); // ✅ ahora por Id
-        }
-
         NavigationManager.NavigateTo("/events");
     }
 
@@ -113,7 +109,7 @@
         "confirm", $"¿Seguro que deseas eliminar el evento '{selectedEvent.Name}'?");
         if (confirmar)
         {
-            await EventService.DeleteEvent(selectedEvent.Id); // ✅ ahora por Id
+            await EventService.DeleteEvent(selectedEvent.Id);
             NavigationManager.NavigateTo("/events");
         }
     }
