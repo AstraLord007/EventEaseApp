@@ -18,7 +18,6 @@ Permite registrar, editar y eliminar eventos, confirmar asistencia al mismo de m
 
 ## 🚀 Instalación
 1. Clonar el repositorio:
-   ```bash
 git clone https://github.com/AstraLord007/EventEaseApp.git
 
 2. Abrir el proyecto en Visual Studio o VS Code.
