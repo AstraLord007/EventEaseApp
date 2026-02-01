@@ -9,7 +9,7 @@ builder.RootComponents.Add<App>("#app");
 
 // Servicios propios
 builder.Services.AddScoped<EventService>();
-builder.Services.AddScoped<SessionService>(); // 👈 Scoped, no Singleton
+builder.Services.AddScoped<SessionService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddAuthorizationCore();
 

@@ -46,7 +46,6 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
         // Acá parseás el JWT y devolvés los claims
-        // (podemos armarte un helper si querés)
         return new List<Claim>();
     }
 }

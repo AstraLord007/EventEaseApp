@@ -16,7 +16,7 @@ namespace EventEaseApp.Data
             new Event { Name = "Feria del Libro", Date = DateTime.Now.AddDays(14), Location = "Buenos Aires", Description = "Presentaciones y charlas" }
         };
 
-        public int PageSize { get; set; } = 4; // 🔹 Tamaño fijo de página
+        public int PageSize { get; set; } = 4;
 
         public EventService(IJSRuntime jsRuntime)
         {

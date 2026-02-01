@@ -6,7 +6,7 @@ namespace EventEaseApp.Data
 {
     public class Event
     {
-        public Guid Id { get; set; } = Guid.NewGuid(); // Identificador único
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres")]

@@ -54,8 +54,6 @@ else
                 </div>
             }
         </div>
-
-        <!-- Lista de eventos -->
         <div class="events-list">
             <h4>Lista de eventos</h4>
             @if (events.Any())
@@ -71,8 +69,6 @@ else
                         </div>
                     }
                 </div>
-
-                <!-- Paginación centrada -->
                 <div class="pagination mt-3">
                     <button class="btn btn-secondary me-2" @onclick="PrevPage" disabled="@(!CanGoPrev)">Anterior</button>
                     <button class="btn btn-secondary" @onclick="NextPage" disabled="@(!CanGoNext)">Siguiente</button>
